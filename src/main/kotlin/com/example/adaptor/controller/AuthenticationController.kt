@@ -44,7 +44,7 @@ class AuthenticationController @Inject constructor(private val authenticationSer
             install(Authentication) {
                 session<UserSession>("auth-session") {
                     validate { session ->
-                        if(authenticationService.getUserByUsernameOrNull(session.username)!=null) {
+                        if(authenticationService.getUserByUsernameOrNull(session.username) is SuccessResponse) {
                             session
                         } else {
                             null
@@ -66,8 +66,8 @@ class AuthenticationController @Inject constructor(private val authenticationSer
                     post("/signup"){
                         val request = call.receive<SignUpRequest>()
                         when(val response = authenticationService.signup(request)){
-                            is SuccessResponse -> call.respondText(response.Message,status = HttpStatusCode.OK)
-                            is FailureResponse -> call.respondText(response.Message,status = HttpStatusCode.BadRequest)
+                            is SuccessResponse -> call.respondText(response.message,status = HttpStatusCode.OK)
+                            is FailureResponse -> call.respondText(response.message,status = HttpStatusCode.BadRequest)
                         }
                     }
 
@@ -76,9 +76,9 @@ class AuthenticationController @Inject constructor(private val authenticationSer
                         when(val response = authenticationService.login(request)){
                             is SuccessResponse -> {
                                 call.sessions.set(UserSession(request.username))
-                                call.respondText(response.Message, status = HttpStatusCode.OK)
+                                call.respondText(response.message, status = HttpStatusCode.OK)
                             }
-                            is FailureResponse -> call.respondText(response.Message,status = HttpStatusCode.BadRequest)
+                            is FailureResponse -> call.respondText(response.message,status = HttpStatusCode.BadRequest)
                         }
                     }
 
@@ -91,9 +91,8 @@ class AuthenticationController @Inject constructor(private val authenticationSer
                         get("/all-users") {
                             call.respond(authenticationService.getAllUsers())
                             when(val response = authenticationService.getAllUsers()){
-                                is SuccessResponse -> call.respond(response.Payload as Any)
-
-                                is FailureResponse -> call.respondText(response.Message,status = HttpStatusCode.BadRequest)
+                                is SuccessResponse -> call.respond(response.payload as Any)
+                                is FailureResponse -> call.respondText(response.message,status = HttpStatusCode.BadRequest)
                             }
                         }
                     }

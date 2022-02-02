@@ -1,8 +1,8 @@
 package com.example.domain.services
 
-import com.example.adaptor.persistence.UserRepository
 import com.example.domain.models.User
 import com.example.domain.ports.AuthenticationServicePort
+import com.example.domain.ports.UserRepositoryPort
 import com.example.request.LoginRequest
 import com.example.request.SignUpRequest
 import com.example.response.FailureResponse
@@ -12,7 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AuthenticationService @Inject constructor(private val userRepository: UserRepository) : AuthenticationServicePort {
+class AuthenticationService @Inject constructor(private val userRepository: UserRepositoryPort) : AuthenticationServicePort {
 
     override fun signup(request: SignUpRequest): Response {
         val (name,username,password) = request

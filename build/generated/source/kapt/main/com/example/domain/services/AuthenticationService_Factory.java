@@ -1,6 +1,6 @@
 package com.example.domain.services;
 
-import com.example.adaptor.persistence.UserRepository;
+import com.example.domain.ports.UserRepositoryPort;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import javax.annotation.processing.Generated;
@@ -16,9 +16,9 @@ import javax.inject.Provider;
     "rawtypes"
 })
 public final class AuthenticationService_Factory implements Factory<AuthenticationService> {
-  private final Provider<UserRepository> userRepositoryProvider;
+  private final Provider<UserRepositoryPort> userRepositoryProvider;
 
-  public AuthenticationService_Factory(Provider<UserRepository> userRepositoryProvider) {
+  public AuthenticationService_Factory(Provider<UserRepositoryPort> userRepositoryProvider) {
     this.userRepositoryProvider = userRepositoryProvider;
   }
 
@@ -28,11 +28,11 @@ public final class AuthenticationService_Factory implements Factory<Authenticati
   }
 
   public static AuthenticationService_Factory create(
-      Provider<UserRepository> userRepositoryProvider) {
+      Provider<UserRepositoryPort> userRepositoryProvider) {
     return new AuthenticationService_Factory(userRepositoryProvider);
   }
 
-  public static AuthenticationService newInstance(UserRepository userRepository) {
+  public static AuthenticationService newInstance(UserRepositoryPort userRepository) {
     return new AuthenticationService(userRepository);
   }
 }

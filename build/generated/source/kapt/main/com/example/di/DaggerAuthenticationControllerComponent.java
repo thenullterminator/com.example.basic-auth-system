@@ -1,12 +1,12 @@
 package com.example.di;
 
 import com.example.adaptor.controller.AuthenticationController;
-import com.example.adaptor.persistence.UserRepository;
-import com.example.adaptor.persistence.UserRepository_Factory;
+import com.example.domain.ports.UserRepositoryPort;
 import com.example.domain.services.AuthenticationService;
 import com.example.domain.services.AuthenticationService_Factory;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.DoubleCheck;
+import dagger.internal.Preconditions;
 import javax.annotation.processing.Generated;
 import javax.inject.Provider;
 
@@ -22,13 +22,14 @@ import javax.inject.Provider;
 public final class DaggerAuthenticationControllerComponent implements AuthenticationControllerComponent {
   private final DaggerAuthenticationControllerComponent authenticationControllerComponent = this;
 
-  private Provider<UserRepository> userRepositoryProvider;
+  private Provider<UserRepositoryPort> providesUserRepositoryPortProvider;
 
   private Provider<AuthenticationService> authenticationServiceProvider;
 
-  private DaggerAuthenticationControllerComponent() {
+  private DaggerAuthenticationControllerComponent(
+      UserRepositoryPortModule userRepositoryPortModuleParam) {
 
-    initialize();
+    initialize(userRepositoryPortModuleParam);
 
   }
 
@@ -41,9 +42,9 @@ public final class DaggerAuthenticationControllerComponent implements Authentica
   }
 
   @SuppressWarnings("unchecked")
-  private void initialize() {
-    this.userRepositoryProvider = DoubleCheck.provider(UserRepository_Factory.create());
-    this.authenticationServiceProvider = DoubleCheck.provider(AuthenticationService_Factory.create(userRepositoryProvider));
+  private void initialize(final UserRepositoryPortModule userRepositoryPortModuleParam) {
+    this.providesUserRepositoryPortProvider = UserRepositoryPortModule_ProvidesUserRepositoryPortFactory.create(userRepositoryPortModuleParam);
+    this.authenticationServiceProvider = DoubleCheck.provider(AuthenticationService_Factory.create(providesUserRepositoryPortProvider));
   }
 
   @Override
@@ -52,11 +53,21 @@ public final class DaggerAuthenticationControllerComponent implements Authentica
   }
 
   public static final class Builder {
+    private UserRepositoryPortModule userRepositoryPortModule;
+
     private Builder() {
     }
 
+    public Builder userRepositoryPortModule(UserRepositoryPortModule userRepositoryPortModule) {
+      this.userRepositoryPortModule = Preconditions.checkNotNull(userRepositoryPortModule);
+      return this;
+    }
+
     public AuthenticationControllerComponent build() {
-      return new DaggerAuthenticationControllerComponent();
+      if (userRepositoryPortModule == null) {
+        this.userRepositoryPortModule = new UserRepositoryPortModule();
+      }
+      return new DaggerAuthenticationControllerComponent(userRepositoryPortModule);
     }
   }
 }

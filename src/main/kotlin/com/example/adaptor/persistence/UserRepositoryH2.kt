@@ -9,7 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UserRepository @Inject constructor() : UserRepositoryPort {
+class UserRepositoryH2 @Inject constructor() : UserRepositoryPort {
 
     init{
         Database.connect("jdbc:h2:mem:regular;DB_CLOSE_DELAY=-1;", "org.h2.Driver")
